@@ -1,3 +1,5 @@
+-- import data into dbo.aoc_day2
+
 SELECT * FROM dbo.aoc_day2
 
 -- part 1
@@ -58,3 +60,6 @@ SELECT @aim, @depth
 
 --final answer (the horizontal position from part 1 is still correct so just use it here)
 SELECT 1034321*2010
+
+--clean up 
+DROP TABLE IF EXISTS dbo.aoc_day2
