@@ -141,5 +141,13 @@ SELECT * FROM #out
 SELECT SUM(cal_value) FROM #out
 --55218
 
+-- This is probably nicer than using temp tables, TBH
+WITH cte AS (
+    SELECT SUBSTRING(new_calibration_values,PATINDEX('%[0-9]%',new_calibration_values),1) AS Digit1
+    , SUBSTRING(REVERSE(new_calibration_values),PATINDEX('%[0-9]%',REVERSE(new_calibration_values)),1) AS Digit2
+FROM Import.Day01
+)
+SELECT SUM(CAST(CONCAT(Digit1,Digit2) AS INT)) FROM cte
+--55218
 
 /* GOLD STAR! */
