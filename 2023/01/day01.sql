@@ -2,20 +2,13 @@ USE AdventOfCode2023
 
 SELECT * FROM Import.Day01
 
-SELECT calibration_values, SUBSTRING(calibration_values,PATINDEX('%[0-9]%',calibration_values),1) AS Digit1
-, SUBSTRING(REVERSE(calibration_values),PATINDEX('%[0-9]%',REVERSE(calibration_values)),1) AS Digit2
-INTO #out
-FROM Import.Day01
-
-SELECT * FROM #out
-
-ALTER TABLE #out ADD cal_value INT
-
-UPDATE #out SET cal_value = CAST(CONCAT(Digit1,Digit2) AS INT) 
-
-SELECT * FROM #out
-
-SELECT SUM(cal_value) FROM #out
+WITH cte AS
+(
+    SELECT SUBSTRING(calibration_values,PATINDEX('%[0-9]%',calibration_values),1) AS Digit1
+    , SUBSTRING(REVERSE(calibration_values),PATINDEX('%[0-9]%',REVERSE(calibration_values)),1) AS Digit2
+    FROM Import.Day01
+)
+SELECT SUM(CAST(CONCAT(Digit1,Digit2) AS INT)) FROM cte
 --54951
 
 -- Part 2 - Need to modify input to include spelled out numbers (nine = 9, etc.)
@@ -120,32 +113,11 @@ UPDATE Import.Day01 SET new_calibration_values = REPLACE(new_calibration_values,
 
 
 
-
-
-
-
-DROP TABLE IF EXISTS #out
-SELECT calibration_values,new_calibration_values, SUBSTRING(new_calibration_values,PATINDEX('%[0-9]%',new_calibration_values),1) AS Digit1
-, SUBSTRING(REVERSE(new_calibration_values),PATINDEX('%[0-9]%',REVERSE(new_calibration_values)),1) AS Digit2
-INTO #out
-FROM Import.Day01
-
-SELECT * FROM #out
-
-ALTER TABLE #out ADD cal_value INT
-
-UPDATE #out SET cal_value = CAST(CONCAT(Digit1,Digit2) AS INT) 
-
-SELECT * FROM #out
-
-SELECT SUM(cal_value) FROM #out
---55218
-
--- This is probably nicer than using temp tables, TBH
-WITH cte AS (
+WITH cte AS 
+(
     SELECT SUBSTRING(new_calibration_values,PATINDEX('%[0-9]%',new_calibration_values),1) AS Digit1
     , SUBSTRING(REVERSE(new_calibration_values),PATINDEX('%[0-9]%',REVERSE(new_calibration_values)),1) AS Digit2
-FROM Import.Day01
+    FROM Import.Day01
 )
 SELECT SUM(CAST(CONCAT(Digit1,Digit2) AS INT)) FROM cte
 --55218
